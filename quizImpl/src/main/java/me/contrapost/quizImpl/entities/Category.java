@@ -3,7 +3,6 @@ package me.contrapost.quizImpl.entities;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,6 @@ public class Category {
     @Size(max = 100)
     private String title;
 
-    @NotNull
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "parentCategory")
     private Map<Long, Subcategory> subcategories;
 

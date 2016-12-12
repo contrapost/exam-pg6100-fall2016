@@ -10,7 +10,13 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
+@NamedQueries(
+        @NamedQuery(name = Quiz.GET_ALL_QUIZZES, query = "select q from Quiz q")
+)
 public class Quiz {
+
+
+    public static final String GET_ALL_QUIZZES = "GET_ALL_QUIZZES";
 
     @Id
     @GeneratedValue
@@ -36,7 +42,8 @@ public class Quiz {
     public Quiz() {
     }
 
-    public Long getId() {        return id;
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
