@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>report</module>
+        <module>quizImpl</module>
     </modules>
 
     <properties>
@@ -33,7 +34,7 @@
 
             <dependency>
                 <groupId>me.contrapost</groupId>
-                <artifactId>quiz</artifactId>
+                <artifactId>quizImpl</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

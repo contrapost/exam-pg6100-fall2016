@@ -58,4 +58,3 @@ buildNumber.properties
 *.iml
 .gitignore
 .idea/
-src/

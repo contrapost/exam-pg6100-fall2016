@@ -19,12 +19,12 @@
             Note: this will also calculate transitive coverage, ie coverage
             in module B when executing tests in A that have dependency on B.
         -->
-        <!--<dependency>
+        <dependency>
             <groupId>me.contrapost</groupId>
-            <artifactId>quiz</artifactId>
+            <artifactId>quizImpl</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>me.contrapost</groupId>
             <artifactId>quizApi</artifactId>
             <version>${project.version}</version>
