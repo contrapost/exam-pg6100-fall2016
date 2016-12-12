@@ -1,11 +1,13 @@
 package me.contrapost.quizImpl.ejb;
 
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
+@Ignore
 @SuppressWarnings("unused")
 @RunWith(Arquillian.class)
 public class CategoryEJBTest extends EjbTestBase {

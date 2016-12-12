@@ -2,6 +2,7 @@ package me.contrapost.quizImpl.ejb;
 
 import com.google.common.base.Throwables;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@Ignore
 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 @RunWith(Arquillian.class)
 public class QuizEJBTest extends EjbTestBase {

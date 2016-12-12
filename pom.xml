@@ -11,6 +11,7 @@
     <modules>
         <module>report</module>
         <module>quizImpl</module>
+        <module>quizAPI</module>
     </modules>
 
     <properties>

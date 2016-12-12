@@ -8,12 +8,13 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 
 import javax.ejb.EJB;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Ignore
 public abstract class EjbTestBase {
 
     @SuppressWarnings("unused")
