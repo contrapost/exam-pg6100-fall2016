@@ -30,6 +30,11 @@
             <artifactId>quizAPI</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>me.contrapost</groupId>
+            <artifactId>gameRest</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!--<dependency>
             <groupId>me.contrapost</groupId>
             <artifactId>quizApi</artifactId>

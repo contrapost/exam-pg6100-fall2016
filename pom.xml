@@ -12,6 +12,7 @@
         <module>report</module>
         <module>quizImpl</module>
         <module>quizAPI</module>
+        <module>gameRest</module>
     </modules>
 
     <properties>
