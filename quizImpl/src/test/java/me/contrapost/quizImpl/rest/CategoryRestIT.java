@@ -220,21 +220,5 @@ public class CategoryRestIT extends RestTestBase {
                 .body("size", is(2));
     }
 
-    private String createSubcategory(String title, String categoryId) {
-        return given().contentType(ContentType.JSON)
-                .body(new SubcategoryDTO(null, title, categoryId))
-                .post("/categories/" + categoryId + "/subcategories")
-                .then()
-                .statusCode(200)
-                .extract().asString();
-    }
 
-    private String createCategory(String title) {
-        return given().contentType(ContentType.JSON)
-                .body(new CategoryDTO(null, title, null))
-                .post("/categories")
-                .then()
-                .statusCode(200)
-                .extract().asString();
-    }
 }

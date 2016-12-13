@@ -4,6 +4,7 @@ package me.contrapost.quizImpl.rest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import me.contrapost.quizAPI.dto.CategoryDTO;
+import me.contrapost.quizAPI.dto.SubcategoryDTO;
 import me.contrapost.quizAPI.dto.collection.ListDTO;
 import me.contrapost.quizImpl.rest.util.JBossUtil;
 import org.junit.After;
@@ -80,12 +81,30 @@ public class RestTestBase {
                     //the "NewsDto" get unmarshalled into a map of fields
                     .map(n -> ((Map) n).get("id"))
                     .forEach(id ->
-                            given().delete("/quizzes/id/" + id)
+                            given().delete("/quizzes/" + id)
                                     .then()
                                     .statusCode(204)
                     );
 
             total = listDto.totalSize - listDto.list.size();
         }
+    }
+
+    public String createSubcategory(String title, String categoryId) {
+        return given().contentType(ContentType.JSON)
+                .body(new SubcategoryDTO(null, title, categoryId))
+                .post("/categories/" + categoryId + "/subcategories")
+                .then()
+                .statusCode(200)
+                .extract().asString();
+    }
+
+    public String createCategory(String title) {
+        return given().contentType(ContentType.JSON)
+                .body(new CategoryDTO(null, title, null))
+                .post("/categories")
+                .then()
+                .statusCode(200)
+                .extract().asString();
     }
 }

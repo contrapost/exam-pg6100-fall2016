@@ -19,7 +19,7 @@ public class QuizConverter {
         QuizDTO dto = new QuizDTO();
         dto.id = String.valueOf(quiz.getId());
         dto.question = quiz.getQuestion();
-        dto.specifyingCategoryId = String.valueOf(quiz.getSubcategoryId());
+        dto.subcategoryId = String.valueOf(quiz.getSubcategoryId());
         dto.answerList = new ArrayList<>(quiz.getAnswers());
 
         return dto;
