@@ -22,7 +22,7 @@ public class ApplicationConfig extends Application {
         beanConfig.setSchemes(new String[]{"http"});
         beanConfig.setHost("localhost:8080");
         beanConfig.setBasePath("/quiz/api");
-        //beanConfig.setResourcePackage("me.contrapost.quizAPI");
+
         beanConfig.setResourcePackage("me.contrapost.quizAPI");
 
         beanConfig.setScan(true);

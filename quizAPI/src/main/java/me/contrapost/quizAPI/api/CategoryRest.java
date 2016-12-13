@@ -88,7 +88,7 @@ public interface CategoryRest {
 
     @ApiOperation("Get a single category specified by id")
     @GET
-    @Path("categories/{id}")
+    @Path("/subcategories/{id}")
     SubcategoryDTO getSubcategoryById(@ApiParam("The numeric id of the subcategory")
                                       @PathParam("id")
                                               Long id);
