@@ -19,6 +19,11 @@
             <artifactId>quizAPI</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>me.contrapost</groupId>
+            <artifactId>gameRest</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>javax</groupId>
@@ -167,7 +172,7 @@
                                 This will specify the entry point of the packaged jar, ie the
                                 class with the "main(String[] args)" method
                             -->
-                            <mainClass>me.contrapost.gameApi.GameApplication</mainClass>
+                            <mainClass>me.contrapost.gameCommands.GameApplication</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>

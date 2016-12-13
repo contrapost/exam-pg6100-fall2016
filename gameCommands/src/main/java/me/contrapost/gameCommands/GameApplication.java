@@ -48,7 +48,7 @@ public class GameApplication extends Application<GameConfiguration> {
         beanConfig.setSchemes(new String[]{"http"});
         beanConfig.setHost("localhost:8080");
         beanConfig.setBasePath("/game");
-        beanConfig.setResourcePackage("me.contrapost.gameApi.api");
+        beanConfig.setResourcePackage("me.contrapost.gameRest");
         beanConfig.setScan(true);
 
         //add further configuration to activate SWAGGER
