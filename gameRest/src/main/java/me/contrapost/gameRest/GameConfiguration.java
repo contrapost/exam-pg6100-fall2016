@@ -1,4 +1,4 @@
-package me.contrapost.gameCommands;
+package me.contrapost.gameRest;
 
 import io.dropwizard.Configuration;
 

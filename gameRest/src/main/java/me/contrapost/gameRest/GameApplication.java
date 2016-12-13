@@ -1,4 +1,4 @@
-package me.contrapost.gameCommands;
+package me.contrapost.gameRest;
 
 import com.netflix.config.ConfigurationManager;
 import io.dropwizard.Application;
@@ -7,7 +7,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
-import me.contrapost.gameCommands.rest.GameRestImpl;
+import me.contrapost.gameRest.rest.GameRestImpl;
 import org.apache.commons.configuration.AbstractConfiguration;
 
 /**

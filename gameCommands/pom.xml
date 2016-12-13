@@ -15,17 +15,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>me.contrapost</groupId>
-            <artifactId>quizAPI</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>me.contrapost</groupId>
-            <artifactId>gameRest</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <scope>compile</scope>
@@ -172,7 +161,7 @@
                                 This will specify the entry point of the packaged jar, ie the
                                 class with the "main(String[] args)" method
                             -->
-                            <mainClass>me.contrapost.gameCommands.GameApplication</mainClass>
+                            <mainClass>me.contrapost.gameRest.GameApplication</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>

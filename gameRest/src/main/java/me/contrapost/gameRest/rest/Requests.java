@@ -1,4 +1,4 @@
-package me.contrapost.gameCommands.rest;
+package me.contrapost.gameRest.rest;
 
 public enum Requests {
     GET_RANDOM_GAME,

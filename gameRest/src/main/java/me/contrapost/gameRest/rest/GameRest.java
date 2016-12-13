@@ -1,4 +1,4 @@
-package me.contrapost.gameRest;
+package me.contrapost.gameRest.rest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +18,7 @@ public interface GameRest {
     @Path("/random")
     Response getRandomGame();
 
-    @ApiOperation("Get a game specified by id")
+    @ApiOperation("Check answer for a quiz")
     @POST
     Response checkAnswer(@ApiParam("Unique id of the quiz")
                         @QueryParam("quizId")
