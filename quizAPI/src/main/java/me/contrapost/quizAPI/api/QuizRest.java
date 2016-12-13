@@ -49,6 +49,14 @@ public interface QuizRest {
             @PathParam("id")
                     Long id);
 
+    @ApiOperation("Check answer of a quiz specified by id")
+    @GET
+    @Path("answer")
+    QuizWithCorrectAnswerDTO checkQuizAnswer(
+            @ApiParam("The numeric id of the quiz")
+            @QueryParam("quizId")
+                    Long quizId);
+
     @ApiOperation("Delete a quiz with the given id")
     @DELETE
     @Path("/{id}")

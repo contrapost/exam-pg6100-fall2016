@@ -3,9 +3,11 @@ package me.contrapost.gameCommands.rest;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import io.swagger.annotations.ApiParam;
+import me.contrapost.gameCommands.dto.AnswerDTO;
 import me.contrapost.gameCommands.dto.GameDTO;
 import me.contrapost.gameRest.GameRest;
 import me.contrapost.quizAPI.dto.QuizDTO;
+import me.contrapost.quizAPI.dto.QuizWithCorrectAnswerDTO;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -32,30 +34,46 @@ public class GameRestImpl implements GameRest{
 
         String address = "http://" + quizApiWebAddress + "/quizzes/random";
 
-        Response response = new CallGameApi(address, Requests.GET_RANDOM_GAME).execute();
+        Response response = new CallGameApi(address).execute();
 
         QuizDTO quizDTO = response.readEntity(QuizDTO.class);
 
         GameDTO gameDTO = new GameDTO(quizDTO.id, quizDTO.question, quizDTO.answerList);
 
-        return null;
+        return Response.status(200)
+                .entity(gameDTO)
+                .build();
     }
 
     @Override
-    public synchronized Response checkAnswer(@ApiParam("Unique id of the quiz") String id, @ApiParam("Answer") int index) {
-        return null;
+    public synchronized Response checkAnswer(@ApiParam("Unique id of the quiz") String id,
+                                             @ApiParam("Answer") int index) {
+
+        String address = "http://" + quizApiWebAddress + "/quizzes/answer/?quizId=" + id;
+
+        Response response = new CallGameApi(address).execute();
+
+        QuizWithCorrectAnswerDTO quizDto = response.readEntity(QuizWithCorrectAnswerDTO.class);
+
+        boolean answer = false;
+
+        if(index == quizDto.indexOfCorrectAnswer) answer = true;
+
+        AnswerDTO answerDTO = new AnswerDTO(answer);
+
+        return Response.status(201)
+                .entity(answerDTO)
+                .build();
     }
 
     private class CallGameApi extends HystrixCommand<Response> {
 
         private final String address;
-        private final Requests request;
 
         @SuppressWarnings("WeakerAccess")
-        protected CallGameApi(String address, Requests request) {
+        protected CallGameApi(String address) {
             super(HystrixCommandGroupKey.Factory.asKey("Interactions with QuizApi"));
             this.address = address;
-            this.request = request;
         }
 
         @Override
@@ -66,19 +84,10 @@ public class GameRestImpl implements GameRest{
                     .build();
             Client client = ClientBuilder.newClient();
 
-            Response response = null;
-            switch (request) {
-                case GET_RANDOM_GAME:
-                    response = client.target(uri)
-                            .request("application/json")
-                            .post(null);
-                    break;
-                case CHECK_ANSWER:
-                    response = client.target(uri)
-                            .request("application/json")
-                            .get();
-                    break;
-            }
+            Response response = client.target(uri)
+                    .request("application/json")
+                    .get();;
+
             return response;
         }
 

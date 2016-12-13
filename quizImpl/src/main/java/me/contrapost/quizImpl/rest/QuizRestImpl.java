@@ -140,6 +140,16 @@ public class QuizRestImpl implements QuizRest {
     }
 
     @Override
+    public QuizWithCorrectAnswerDTO checkQuizAnswer(@ApiParam("The numeric id of the quiz") Long quizId) {
+
+        if (quizEJB.getQuiz(quizId) == null) {
+            throw new WebApplicationException("Cannot find category with id: " + quizId, 404);
+        }
+
+        return QuizWithCorrectAnswerConverter.transform(quizEJB.getQuiz(quizId));
+    }
+
+    @Override
     public void deleteQuiz(@ApiParam("The numeric id of the quiz") Long id) {
         if (quizEJB.getQuiz(id) == null) {
             throw new WebApplicationException("Cannot find category with id: " + id, 404);
