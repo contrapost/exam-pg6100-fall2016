@@ -11,7 +11,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
-@Api(description = "Handling of creating and retrieving categories and subcategories")
+@Api(value = "/quizzes", description = "Handling of creating and retrieving categories and subcategories")
 @Produces(Formats.JSON_V1)
 @Path("/quizzes")
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)

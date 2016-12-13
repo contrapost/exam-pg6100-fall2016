@@ -8,6 +8,7 @@ import me.contrapost.quizImpl.rest.util.JBossUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,7 @@ public class CategoryRestTestBase {
            Here, we read each resource (GET), and then delete them
            one by one (DELETE)
          */
-        List<CategoryDTO> list = Arrays.asList(given().accept(ContentType.JSON).get("/category")
+        List<CategoryDTO> list = Arrays.asList(given().accept(ContentType.JSON).get("/categories")
                 .then()
                 .statusCode(200)
                 .extract().as(CategoryDTO[].class));
@@ -51,9 +52,9 @@ public class CategoryRestTestBase {
          */
         list.forEach(dto ->
                 given().pathParam("id", dto.id)
-                        .delete("category/{id}")
+                        .delete("/categories/{id}")
                         .then().statusCode(204));
 
-        get().then().statusCode(200).body("size()", is(0));
+        get("/categories").then().statusCode(200).body("size()", is(0));
     }
 }

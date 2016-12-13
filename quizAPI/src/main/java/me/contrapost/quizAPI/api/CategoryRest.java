@@ -11,14 +11,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Api(description = "Handling of creating and retrieving categories and subcategories")
+@Api(value = "/categories", description = "Handling of creating and retrieving categories and subcategories")
 @Produces(Formats.JSON_V1)
+@Path("/categories")
 @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 public interface CategoryRest {
 
     @ApiOperation("Get all categories")
     @GET
-    @Path("/categories")
     List<CategoryDTO> getAllCategories(@ApiParam("Whether to retrieve or not subcategories for the given category")
                                        @QueryParam("expand")
                                        @DefaultValue("false")
@@ -26,7 +26,6 @@ public interface CategoryRest {
 
     @ApiOperation("Create a new category")
     @POST
-    @Path("/categories")
     @Consumes(Formats.JSON_V1)
     @ApiResponse(code = 200, message = "The id of newly created category")
     Long createCategory(
@@ -35,7 +34,7 @@ public interface CategoryRest {
 
     @ApiOperation("Get a single category specified by id")
     @GET
-    @Path("categories/{id}")
+    @Path("/{id}")
     CategoryDTO getCategoryById(@ApiParam("Whether to retrieve or not subcategories for the given category")
                                 @QueryParam("expand")
                                 @DefaultValue("false")
@@ -46,13 +45,13 @@ public interface CategoryRest {
 
     @ApiOperation("Delete a category with the given id")
     @DELETE
-    @Path("/categories/{id}")
+    @Path("/{id}")
     void deleteCategory(@ApiParam("The numeric id of the category")
                         @PathParam("id")
                                 Long id);
 
     @ApiOperation("Modify the category using JSON Merge Patch")
-    @Path("/categories/{id}")
+    @Path("/{id}")
     @PATCH
     @Consumes(Formats.JSON_MERGE_V1)
     void mergePatchCategory(@ApiParam("The unique id of the category")
@@ -66,14 +65,14 @@ public interface CategoryRest {
             @ApiResponse(code = 301, message = "Deprecated URI. Moved permanently.")
     })
     @GET
-    @Path("/categories/{id}/subcategories")
+    @Path("/{id}/subcategories")
     Response getAllSubCategoriesForRootCategory(@ApiParam("The unique id of the category")
                                                 @PathParam("id")
                                                         Long id);
 
     @ApiOperation("Create a subcategory of the category specified by id")
     @POST
-    @Path("/categories/{id}/subcategories")
+    @Path("/{id}/subcategories")
     Long createSubcategoriesForCategory(@ApiParam("Title of a new subcategory. Should not specify id.")
                                                 SubcategoryDTO dto,
                                         @ApiParam("The unique id of the category")
