@@ -88,4 +88,12 @@ public class CategoryEJB {
     public List<Subcategory> getAllSubcategories() {
         return em.createQuery("select s from Subcategory s").getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<Subcategory> getAllSubcategoriesForParent(Long parentId) {
+
+        return em.createQuery("select s from Subcategory s where s.parentCategory.id = :id")
+                .setParameter("id", parentId)
+                .getResultList();
+    }
 }

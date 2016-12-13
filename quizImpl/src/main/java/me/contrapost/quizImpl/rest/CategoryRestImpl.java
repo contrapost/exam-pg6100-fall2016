@@ -8,6 +8,7 @@ import me.contrapost.quizAPI.api.CategoryRest;
 import me.contrapost.quizAPI.dto.CategoryDTO;
 import me.contrapost.quizAPI.dto.SubcategoryDTO;
 import me.contrapost.quizImpl.ejb.CategoryEJB;
+import me.contrapost.quizImpl.entities.Subcategory;
 import me.contrapost.quizImpl.rest.converters.CategoryConverter;
 import me.contrapost.quizImpl.rest.converters.SubcategoryConverter;
 
@@ -117,7 +118,7 @@ public class CategoryRestImpl implements CategoryRest {
     @Override
     public Response getAllSubCategoriesForRootCategory(@ApiParam("The unique id of the category") Long id) {
         return Response.status(301)
-                .location(UriBuilder.fromUri("/subcategories?parentId=" + id)
+                .location(UriBuilder.fromUri("categories/subcategories?parentId=" + id)
                         .build())
                 .build();
     }
@@ -146,8 +147,15 @@ public class CategoryRestImpl implements CategoryRest {
     @Override
     public List<SubcategoryDTO> getAllSubcategories(@ApiParam("Set of subcategories belonging to a category with specified id")
                                                             Long id) {
+        List<Subcategory> list;
 
-        return SubcategoryConverter.transform(categoryEJB.getAllSubcategories());
+        if(id != null) {
+            requireCategoryExists(id);
+            list = categoryEJB.getAllSubcategoriesForParent(id);
+        } else {
+            list = categoryEJB.getAllSubcategories();
+        }
+        return SubcategoryConverter.transform(list);
     }
 
     @Override

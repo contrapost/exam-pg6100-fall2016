@@ -11,9 +11,10 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class CategoryRestIT extends CategoryRestTestBase{
+public class CategoryRestIT extends RestTestBase {
 
     @Test
     public void testCleanDB() {
@@ -171,7 +172,61 @@ public class CategoryRestIT extends CategoryRestTestBase{
 
         String categoryId = createCategory("Category");
 
+        String newTitle = "RootCategory v.2";
 
+        given().contentType("application/merge-patch+json")
+                .body("{\"title\":\"" + newTitle + "\"}")
+                .patch("/categories/" + categoryId)
+                .then()
+                .statusCode(204);
+
+        CategoryDTO readBack = given().port(8080)
+                .baseUri("http://localhost")
+                .accept(ContentType.JSON)
+                .get("/categories/" + categoryId)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(CategoryDTO.class);
+
+        assertEquals(newTitle, readBack.title);
+        assertEquals(categoryId, readBack.id); // should had stayed the same
+    }
+
+    @Test
+    public void testGetSubCategories() {
+
+        String categoryId1 = createCategory("Category1");
+        String categoryId2 = createCategory("Category2");
+
+        String subcategoryId1 = createSubcategory("Sub1", categoryId1);
+        String subcategoryId2 = createSubcategory("Sub2", categoryId2);
+        String subcategoryId3 = createSubcategory("Sub3", categoryId2);
+
+        get("categories/subcategories")
+                .then()
+                .statusCode(200)
+                .body("list.size()", is(3));
+
+        given().queryParam("parentId", categoryId1)
+                .get("categories/subcategories")
+                .then()
+                .statusCode(200)
+                .body("size", is(1));
+
+        get("categories/" + categoryId2 + "/subcategories")
+                .then()
+                .statusCode(200)
+                .body("size", is(2));
+    }
+
+    private String createSubcategory(String title, String categoryId) {
+        return given().contentType(ContentType.JSON)
+                .body(new SubcategoryDTO(null, title, categoryId))
+                .post("/categories/" + categoryId + "/subcategories")
+                .then()
+                .statusCode(200)
+                .extract().asString();
     }
 
     private String createCategory(String title) {

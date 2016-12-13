@@ -4,20 +4,21 @@ package me.contrapost.quizImpl.rest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import me.contrapost.quizAPI.dto.CategoryDTO;
+import me.contrapost.quizAPI.dto.collection.ListDTO;
 import me.contrapost.quizImpl.rest.util.JBossUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.Is.is;
 
-public class CategoryRestTestBase {
+public class RestTestBase {
 
     @BeforeClass
     public static void initClass() {
@@ -56,5 +57,35 @@ public class CategoryRestTestBase {
                         .then().statusCode(204));
 
         get("/categories").then().statusCode(200).body("size()", is(0));
+
+        int total = Integer.MAX_VALUE;
+
+        /*
+            as the REST API does not return the whole state of the database (even,
+            if I use an infinite "limit") I need to keep doing queries until the totalSize is 0
+         */
+
+        while (total > 0) {
+
+            //seems there are some limitations when handling generics
+            ListDTO<?> listDto = given()
+                    .queryParam("limit", Integer.MAX_VALUE)
+                    .get("/quizzes")
+                    .then()
+                    .statusCode(200)
+                    .extract()
+                    .as(ListDTO.class);
+
+            listDto.list.stream()
+                    //the "NewsDto" get unmarshalled into a map of fields
+                    .map(n -> ((Map) n).get("id"))
+                    .forEach(id ->
+                            given().delete("/quizzes/id/" + id)
+                                    .then()
+                                    .statusCode(204)
+                    );
+
+            total = listDto.totalSize - listDto.list.size();
+        }
     }
 }
