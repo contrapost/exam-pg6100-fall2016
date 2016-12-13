@@ -20,7 +20,7 @@ public interface GameRest {
 
     @ApiOperation("Get a game specified by id")
     @POST
-    Response getAllGame(@ApiParam("Unique id of the quiz")
+    Response checkAnswer(@ApiParam("Unique id of the quiz")
                         @QueryParam("quizId")
                                 String id,
                         @ApiParam("Answer")

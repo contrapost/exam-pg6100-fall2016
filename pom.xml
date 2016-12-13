@@ -13,6 +13,7 @@
         <module>quizImpl</module>
         <module>quizAPI</module>
         <module>gameRest</module>
+        <module>gameCommands</module>
     </modules>
 
     <properties>

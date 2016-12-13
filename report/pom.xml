@@ -35,6 +35,11 @@
             <artifactId>gameRest</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>me.contrapost</groupId>
+            <artifactId>gameCommands</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!--<dependency>
             <groupId>me.contrapost</groupId>
             <artifactId>quizApi</artifactId>
