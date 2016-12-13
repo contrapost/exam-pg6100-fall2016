@@ -20,9 +20,9 @@ public interface CategoryRest {
     @GET
     @Path("/categories")
     List<CategoryDTO> getAllCategories(@ApiParam("Whether to retrieve or not subcategories for the given category")
-                                                  @QueryParam("expand")
-                                                  @DefaultValue("false")
-                                                          Boolean expand);
+                                       @QueryParam("expand")
+                                       @DefaultValue("false")
+                                               Boolean expand);
 
     @ApiOperation("Create a new category")
     @POST
@@ -37,18 +37,18 @@ public interface CategoryRest {
     @GET
     @Path("categories/{id}")
     CategoryDTO getCategoryById(@ApiParam("Whether to retrieve or not subcategories for the given category")
-                                        @QueryParam("expand")
-                                        @DefaultValue("false")
-                                                Boolean expand,
-                                        @ApiParam("The numeric id of the category")
-                                        @PathParam("id")
-                                                Long id);
+                                @QueryParam("expand")
+                                @DefaultValue("false")
+                                        Boolean expand,
+                                @ApiParam("The numeric id of the category")
+                                @PathParam("id")
+                                        Long id);
 
     @ApiOperation("Delete a category with the given id")
     @DELETE
     @Path("/categories/{id}")
     void deleteCategory(@ApiParam("The numeric id of the category")
-                                @PathParam("id")
+                        @PathParam("id")
                                 Long id);
 
     @ApiOperation("Modify the category using JSON Merge Patch")
@@ -56,28 +56,29 @@ public interface CategoryRest {
     @PATCH
     @Consumes(Formats.JSON_MERGE_V1)
     void mergePatchCategory(@ApiParam("The unique id of the category")
-                                @PathParam("id")
-                                        Long id,
-                                @ApiParam("The partial patch")
-                                        String jsonPatch);
+                            @PathParam("id")
+                                    Long id,
+                            @ApiParam("The partial patch")
+                                    String jsonPatch);
 
     @ApiOperation("Get all subcategories of the category specified by id")
-//    @ApiResponses({
-//            @ApiResponse(code = 301, message = "Deprecated URI. Moved permanently.")
-//    })
+    @ApiResponses({
+            @ApiResponse(code = 301, message = "Deprecated URI. Moved permanently.")
+    })
     @GET
     @Path("/categories/{id}/subcategories")
- //   @Deprecated
-    Response deprecatedGetAllSubCategoriesForRootCategory(@ApiParam("The unique id of the category")
-                                                          @PathParam("id")
-                                                                  Long id);
+    Response getAllSubCategoriesForRootCategory(@ApiParam("The unique id of the category")
+                                                @PathParam("id")
+                                                        Long id);
 
     @ApiOperation("Create a subcategory of the category specified by id")
     @POST
     @Path("/categories/{id}/subcategories")
-    Response createSubcategoriesForCategory(@ApiParam("The unique id of the category")
-                                                          @PathParam("id")
-                                                                  Long id);
+    Long createSubcategoriesForCategory(@ApiParam("Title of a new subcategory. Should not specify id.")
+                                                SubcategoryDTO dto,
+                                        @ApiParam("The unique id of the category")
+                                        @PathParam("id")
+                                                Long id);
 
     @ApiOperation("Get all subcategories")
     @GET
@@ -90,6 +91,6 @@ public interface CategoryRest {
     @GET
     @Path("categories/{id}")
     SubcategoryDTO getSubcategoryById(@ApiParam("The numeric id of the subcategory")
-                                                @PathParam("id")
-                                                 Long id);
+                                      @PathParam("id")
+                                              Long id);
 }

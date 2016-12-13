@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Stateless
 public class CategoryEJB {
@@ -63,9 +64,28 @@ public class CategoryEJB {
         return em.find(Category.class, id);
     }
 
+    public Category getCategory(@NotNull long id, boolean expand){
+        Category categories = getCategory(id);
+        categories.getSubcategories().size();
+        return categories;
+    }
+
     public Subcategory getSubcategory(@NotNull long id){
         return em.find(Subcategory.class, id);
     }
 
 
+    @SuppressWarnings("unchecked")
+    public List<Category> getAllCategories(Boolean expand) {
+        List<Category> list = em.createQuery("select c from Category c").getResultList();
+
+        if(expand) list.forEach(category -> category.getSubcategories().size());
+
+        return list;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Subcategory> getAllSubcategories() {
+        return em.createQuery("select s from Subcategory s").getResultList();
+    }
 }

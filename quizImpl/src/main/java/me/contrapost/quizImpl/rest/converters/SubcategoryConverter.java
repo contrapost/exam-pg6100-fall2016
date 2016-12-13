@@ -1,5 +1,6 @@
-package me.contrapost.quizAPI.dto;
+package me.contrapost.quizImpl.rest.converters;
 
+import me.contrapost.quizAPI.dto.SubcategoryDTO;
 import me.contrapost.quizImpl.entities.Subcategory;
 
 import java.util.List;
@@ -25,4 +26,5 @@ public class SubcategoryConverter {
         return entities.stream()
                 .map(SubcategoryConverter::transform)
                 .collect(Collectors.toList());
-    }}
+    }
+}

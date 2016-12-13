@@ -1,8 +1,8 @@
 package me.contrapost.quizImpl;
 
 import io.swagger.jaxrs.config.BeanConfig;
-import me.contrapost.quizImpl.rest.CategoryRest;
-import me.contrapost.quizImpl.rest.QuizRest;
+import me.contrapost.quizImpl.rest.CategoryRestImpl;
+import me.contrapost.quizImpl.rest.QuizRestImpl;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -28,8 +28,8 @@ public class ApplicationConfig extends Application {
         beanConfig.setScan(true);
 
         HashSet<Class<?>> c = new HashSet<>();
-        c.add(QuizRest.class);
-        c.add(CategoryRest.class);
+        c.add(QuizRestImpl.class);
+        c.add(CategoryRestImpl.class);
 
         c.add(io.swagger.jaxrs.listing.ApiListingResource.class);
         c.add(io.swagger.jaxrs.listing.SwaggerSerializers.class);

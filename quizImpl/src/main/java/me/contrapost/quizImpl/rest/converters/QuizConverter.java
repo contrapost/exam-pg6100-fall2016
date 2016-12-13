@@ -1,5 +1,6 @@
-package me.contrapost.quizAPI.dto;
+package me.contrapost.quizImpl.rest.converters;
 
+import me.contrapost.quizAPI.dto.QuizDTO;
 import me.contrapost.quizAPI.dto.collection.ListDTO;
 import me.contrapost.quizImpl.entities.Quiz;
 

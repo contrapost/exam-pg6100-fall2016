@@ -15,7 +15,7 @@ public class QuizWithCorrectAnswerDTO {
     public String question;
 
     @ApiModelProperty("Id of the specifying category the quiz belongs to")
-    public String specifyingCategoryId;
+    public String subcategoryId;
 
     @ApiModelProperty("The set of answers marked with false and true")
     public List<String> answerList;
@@ -29,7 +29,7 @@ public class QuizWithCorrectAnswerDTO {
     public QuizWithCorrectAnswerDTO(String id, String question, String categoryId, List<String> answers, int indexOfCorrectAnswer) {
         this.id = id;
         this.question = question;
-        specifyingCategoryId = categoryId;
+        subcategoryId = categoryId;
         answerList = answers;
         this.indexOfCorrectAnswer = indexOfCorrectAnswer;
     }

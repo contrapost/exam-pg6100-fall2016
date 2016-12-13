@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 @Stateless
 public class QuizEJB {
 
@@ -66,20 +67,23 @@ public class QuizEJB {
     public boolean updateQuiz(@NotNull Long id,
                               @NotNull String newQuestion,
                               @NotNull List<String> newAnswerList,
-                              @NotNull int newCorrectAnswerIndex,
-                              @NotNull long newParentCategoryId) {
+                              @NotNull int newCorrectAnswerIndex) {
         Quiz quiz = em.find(Quiz.class, id);
         if (quiz == null) return false;
         quiz.setQuestion(newQuestion);
         quiz.setAnswers(newAnswerList);
         quiz.setCorrectAnswerIndex(newCorrectAnswerIndex);
-        quiz.setSubcategoryId(newParentCategoryId);
         return true;
     }
 
     public List<Quiz> getAllQuizzes() {
         //noinspection unchecked
         return em.createNamedQuery(Quiz.GET_ALL_QUIZZES).getResultList();
+    }
+
+    public List<Quiz> getAllQuizzes(int max) {
+        //noinspection unchecked
+        return em.createNamedQuery(Quiz.GET_ALL_QUIZZES).setMaxResults(max).getResultList();
     }
 
     public List<Long> getRandomQuizzes(int numberOfQuizzes) {
@@ -91,9 +95,17 @@ public class QuizEJB {
         return ids;
     }
 
-    public Quiz getRandomQuizzes() {
+    public Long getRandomQuiz() {
         List<Quiz> quizzes = getAllQuizzes();
 
-        return quizzes.get(new Random().nextInt(quizzes.size()));
+        return quizzes.get(new Random().nextInt(quizzes.size())).getId();
+    }
+
+    public List<Quiz> getAllQuizForSubcategory(int maxFromDb, Long id) {
+        //noinspection unchecked
+        return em.createQuery("select q from Quiz q where q.subcategoryId = :id")
+                .setParameter("id", id)
+                .setMaxResults(maxFromDb)
+                .getResultList();
     }
 }

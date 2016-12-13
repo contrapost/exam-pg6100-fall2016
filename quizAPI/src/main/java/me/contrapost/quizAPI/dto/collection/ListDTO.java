@@ -2,9 +2,9 @@ package me.contrapost.quizAPI.dto.collection;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import me.contrapost.quizApi.dto.hal.HalLink;
-import me.contrapost.quizApi.dto.hal.HalLinkSet;
-import me.contrapost.quizApi.dto.hal.HalObject;
+import me.contrapost.quizAPI.dto.hal.HalLink;
+import me.contrapost.quizAPI.dto.hal.HalLinkSet;
+import me.contrapost.quizAPI.dto.hal.HalObject;
 
 import java.util.List;
 

@@ -10,42 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>quizAPI</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>me.contrapost</groupId>
-            <artifactId>quizImpl</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-client</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -60,52 +31,5 @@
             <artifactId>swagger-hibernate-validations</artifactId>
         </dependency>
     </dependencies>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
-
-            <!-- make sure we calculate code coverage -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-            </plugin>
-
-            <!-- Make sure that Wildfly is automatically downloaded and installed -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
-
-            <!--
-                These two plugins are needed to run the Selenium tests automatically
-                from Maven when executing "mvn verify"
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.wildfly.plugins</groupId>
-                <artifactId>wildfly-maven-plugin</artifactId>
-                <configuration>
-                    <!--
-                        This is quite complex (ie Java Agents and bytecode instrumentantion on the fly)...
-                        for now just copy&paste it.
-                        If you are really interested in understanding what it is actually doing,
-                        ask me in the breaks after the lectures
-                    -->
-                    <java-opts>
-                        <!--<javaOpt>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005</javaOpt>-->
-                        -javaagent:${settings.localRepository}${fs}org${fs}jacoco${fs}org.jacoco.agent${fs}${version.jacoco}${fs}org.jacoco.agent-${version.jacoco}-runtime.jar=destfile=${basedir}${fs}target${fs}jacoco-it.exec
-                    </java-opts>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

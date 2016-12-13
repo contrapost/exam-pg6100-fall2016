@@ -14,6 +14,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>me.contrapost</groupId>
+            <artifactId>quizAPI</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
