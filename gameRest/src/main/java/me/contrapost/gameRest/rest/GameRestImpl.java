@@ -8,6 +8,7 @@ import me.contrapost.gameCommands.hystrix.GameApiCall;
 import me.contrapost.quizAPI.dto.QuizDTO;
 import me.contrapost.quizAPI.dto.QuizWithCorrectAnswerDTO;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -42,9 +43,9 @@ public class GameRestImpl implements GameRest{
 
     @Override
     public synchronized Response checkAnswer(@ApiParam("Unique id of the quiz") String id,
-                                             @ApiParam("Answer") int index) {
+                                             @ApiParam("Answer") String index) {
 
-        String address = "http://" + quizApiWebAddress + "/quizzes/answer/?quizId=" + id;
+        String address = "http://" + quizApiWebAddress + "/quizzes/answer?quizId=" + id;
 
         Response response = new GameApiCall(address).execute();
 
@@ -52,7 +53,14 @@ public class GameRestImpl implements GameRest{
 
         boolean answer = false;
 
-        if(index == quizDto.indexOfCorrectAnswer) answer = true;
+        int indexAsNumber;
+        try {
+            indexAsNumber = Integer.parseInt(index);
+        } catch (NumberFormatException e) {
+            throw new WebApplicationException("Index of correct answer isn't numeric", 400);
+        }
+
+        if(indexAsNumber == quizDto.indexOfCorrectAnswer) answer = true;
 
         AnswerDTO answerDTO = new AnswerDTO(answer);
 

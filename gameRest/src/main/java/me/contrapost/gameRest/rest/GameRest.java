@@ -25,5 +25,5 @@ public interface GameRest {
                                 String id,
                         @ApiParam("Answer")
                         @QueryParam("answerIndex")
-                                int index);
+                                String index);
 }
