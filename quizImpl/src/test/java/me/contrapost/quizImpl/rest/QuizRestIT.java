@@ -196,6 +196,72 @@ public class QuizRestIT extends RestTestBase {
     }
 
     @Test
+    public void testPatchChangeQuestionWithNewId() {
+        String categoryId = createCategory("Category");
+        String subcategoryId = createSubcategory("Sub", categoryId);
+
+        String question = "Question";
+        List<String> answers = Arrays.asList("Answer 1", "Answer 2", "Answer 3", "Answer 4");
+        int correct = 0;
+
+        String id = given().contentType(ContentType.JSON)
+                .body(new QuizWithCorrectAnswerDTO(null, question, subcategoryId, answers, correct))
+                .post("/quizzes")
+                .then()
+                .statusCode(200)
+                .extract().asString();
+
+        QuizDTO originalQuiz = given()
+                .accept(ContentType.JSON)
+                .get("/quizzes/" + id)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(QuizDTO.class);
+
+        String newId = "13654";
+
+        given().contentType("application/merge-patch+json")
+                .body("{\"id\":\"" + newId + "\"}")
+                .patch("/quizzes/" + id)
+                .then()
+                .statusCode(409);
+    }
+
+    @Test
+    public void testPatchChangeQuestionWithWrongId() {
+        String categoryId = createCategory("Category");
+        String subcategoryId = createSubcategory("Sub", categoryId);
+
+        String question = "Question";
+        List<String> answers = Arrays.asList("Answer 1", "Answer 2", "Answer 3", "Answer 4");
+        int correct = 0;
+
+        String id = given().contentType(ContentType.JSON)
+                .body(new QuizWithCorrectAnswerDTO(null, question, subcategoryId, answers, correct))
+                .post("/quizzes")
+                .then()
+                .statusCode(200)
+                .extract().asString();
+
+        QuizDTO originalQuiz = given()
+                .accept(ContentType.JSON)
+                .get("/quizzes/" + id)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(QuizDTO.class);
+
+        String newQuestion = "Quiz question v.2";
+
+        given().contentType("application/merge-patch+json")
+                .body("{\"question\":\"" + newQuestion + "\"}")
+                .patch("/quizzes/" + Integer.MAX_VALUE)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     public void testSelfLink() {
 
         for (int i = 0; i < 15; i++) createQuizWithDifferentCategories("" + i, i);

@@ -161,10 +161,12 @@ public class QuizRestImpl implements QuizRest {
     @Override
     public void mergePatchQuiz(@ApiParam("The numeric id of the quiz") Long id,
                                @ApiParam("The partial patch") String jsonPatch) {
-        QuizWithCorrectAnswerDTO dto = QuizWithCorrectAnswerConverter.transform(quizEJB.getQuiz(id));
-        if (dto == null) {
-            throw new WebApplicationException("Cannot find quiz with id " + id, 404);
+
+        if (quizEJB.getQuiz(id) == null) {
+            throw new WebApplicationException("Cannot find category with id: " + id, 404);
         }
+
+        QuizWithCorrectAnswerDTO dto = QuizWithCorrectAnswerConverter.transform(quizEJB.getQuiz(id));
 
         ObjectMapper jackson = new ObjectMapper();
 
