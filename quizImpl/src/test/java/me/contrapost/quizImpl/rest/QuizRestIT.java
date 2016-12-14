@@ -58,6 +58,73 @@ public class QuizRestIT extends RestTestBase {
     }
 
     @Test
+    public void testCreateQuizWithId() {
+        String categoryId = createCategory("Category");
+        String subcategoryId = createSubcategory("Sub", categoryId);
+
+        String question = "Question";
+        List<String> answers = Arrays.asList("Answer 1", "Answer 2", "Answer 3", "Answer 4");
+        int correct = 0;
+
+        QuizWithCorrectAnswerDTO dto = new QuizWithCorrectAnswerDTO("1", question, subcategoryId, answers, correct);
+
+        get("/quizzes").then().statusCode(200).body("list.size()", is(0));
+
+        given().contentType(ContentType.JSON)
+                .body(dto)
+                .post("/quizzes")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testCreateQuizWithWrongParentId() {
+        String categoryId = createCategory("Category");
+        String subcategoryId = createSubcategory("Sub", categoryId);
+
+        String question = "Question";
+        List<String> answers = Arrays.asList("Answer 1", "Answer 2", "Answer 3", "Answer 4");
+        int correct = 0;
+
+        QuizWithCorrectAnswerDTO dto = new QuizWithCorrectAnswerDTO(null, question, subcategoryId + "X", answers, correct);
+
+        get("/quizzes").then().statusCode(200).body("list.size()", is(0));
+
+        given().contentType(ContentType.JSON)
+                .body(dto)
+                .post("/quizzes")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void testCheckAnswer() {
+        String categoryId = createCategory("Category");
+        String subcategoryId = createSubcategory("Sub", categoryId);
+
+        String question = "Question";
+        List<String> answers = Arrays.asList("Answer 1", "Answer 2", "Answer 3", "Answer 4");
+        int correct = 0;
+
+        QuizWithCorrectAnswerDTO dto = new QuizWithCorrectAnswerDTO(null, question, subcategoryId, answers, correct);
+
+        String id = given().contentType(ContentType.JSON)
+                .body(dto)
+                .post("/quizzes")
+                .then()
+                .statusCode(200)
+                .extract().asString();
+
+        QuizWithCorrectAnswerDTO answerDTO = given().queryParam("quizId", id)
+                .get("/quizzes/answer")
+                .then()
+                .statusCode(200)
+                .extract().as(QuizWithCorrectAnswerDTO.class);
+
+        assertEquals(answerDTO.indexOfCorrectAnswer, 0);
+    }
+
+    @Test
     public void testGetRandom() {
 
         String categoryId = createCategory("Category");
