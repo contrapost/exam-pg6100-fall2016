@@ -148,6 +148,14 @@ public class QuizRestIT extends RestTestBase {
     }
 
     @Test
+    public void testGetRandomWhenThereAreNoQuizzes() {
+
+        get("/quizzes/random")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
     public void testPatchChangeQuestion() {
 
         String categoryId = createCategory("Category");
@@ -196,6 +204,42 @@ public class QuizRestIT extends RestTestBase {
     }
 
     @Test
+    public void testPatchChangeAnswerIndex() {
+
+        String categoryId = createCategory("Category");
+        String subcategoryId = createSubcategory("Sub", categoryId);
+
+        String question = "Question";
+        List<String> answers = Arrays.asList("Answer 1", "Answer 2", "Answer 3", "Answer 4");
+        int correct = 0;
+
+        String id = given().contentType(ContentType.JSON)
+                .body(new QuizWithCorrectAnswerDTO(null, question, subcategoryId, answers, correct))
+                .post("/quizzes")
+                .then()
+                .statusCode(200)
+                .extract().asString();
+
+        QuizDTO originalQuiz = given()
+                .accept(ContentType.JSON)
+                .get("/quizzes/" + id)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(QuizDTO.class);
+
+        assertTrue(originalQuiz.answerList.stream().anyMatch(answer -> answer.equals("Answer 1")));
+
+        int newCorrectAnswer = 2;
+
+        given().contentType("application/merge-patch+json")
+                .body("{\"indexOfCorrectAnswer\":" + newCorrectAnswer + "}")
+                .patch("/quizzes/" + id)
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
     public void testPatchChangeQuestionWithNewId() {
         String categoryId = createCategory("Category");
         String subcategoryId = createSubcategory("Sub", categoryId);
@@ -226,6 +270,39 @@ public class QuizRestIT extends RestTestBase {
                 .patch("/quizzes/" + id)
                 .then()
                 .statusCode(409);
+    }
+
+    @Test
+    public void testPatchChangeQuestionWithNewIdOfParent() {
+        String categoryId = createCategory("Category");
+        String subcategoryId = createSubcategory("Sub", categoryId);
+
+        String question = "Question";
+        List<String> answers = Arrays.asList("Answer 1", "Answer 2", "Answer 3", "Answer 4");
+        int correct = 0;
+
+        String id = given().contentType(ContentType.JSON)
+                .body(new QuizWithCorrectAnswerDTO(null, question, subcategoryId, answers, correct))
+                .post("/quizzes")
+                .then()
+                .statusCode(200)
+                .extract().asString();
+
+        QuizDTO originalQuiz = given()
+                .accept(ContentType.JSON)
+                .get("/quizzes/" + id)
+                .then()
+                .statusCode(200)
+                .extract()
+                .as(QuizDTO.class);
+
+        String newParentId = "13654";
+
+        given().contentType("application/merge-patch+json")
+                .body("{\"subcategoryId\":\"" + newParentId + "\"}")
+                .patch("/quizzes/" + id)
+                .then()
+                .statusCode(400);
     }
 
     @Test
