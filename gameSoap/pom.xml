@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>exam_pg6100_fall2016</artifactId>
+        <groupId>me.contrapost</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gameSoap</artifactId>
+    <packaging>war</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>me.contrapost</groupId>
+            <artifactId>gameCommands</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>me.contrapost</groupId>
+            <artifactId>quizAPI</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <add-user>
+                        <users>
+                            <user>
+                                <username>admin</username>
+                                <password>admin</password>
+                            </user>
+                        </users>
+                    </add-user>
+                    <javaOpts>
+                        <!-- Make it point to WireMock -->
+                        <javaOpt>-DquizApiAddress=localhost:8099</javaOpt>
+                    </javaOpts>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>init</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>shutdown</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>undeploy</goal>
+                            <goal>shutdown</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jax-ws-commons</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <configuration>
+                    <!-- Needed, otherwise you get weird error messages...  -->
+                    <vmArgs>
+                        <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+                    </vmArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>Create WSDL</id>
+                        <!--
+                            In this phase, we automatically generate
+                            the WSDL from the Java code.
+                        -->
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>wsgen</goal>
+                        </goals>
+                        <configuration>
+                            <genWsdl>true</genWsdl>
+                            <verbose>true</verbose>
+                            <keep>true</keep>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Create client code from WSDL</id>
+                        <!--
+                            This is after the process-classes phase,
+                            in which we need to set the configuration
+                            for the tests.
+                          -->
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>wsimport-test</goal>
+                        </goals>
+                        <configuration>
+                            <!--
+                              An actual client of the SOAP would have used the following.
+                              But as here we compile the tests BEFORE Wildfly is started,
+                              we cannot use it, as not available yet
+
+                              <wsdlUrls>
+                                  <wsdlUrl>http://localhost:8080/newssoap/NewsSoapImpl?wsdl</wsdlUrl>
+                              </wsdlUrls>
+
+                              so, we just configure the plugin to directly pick up the WSDL
+                              generated during the build of the SOAP web service.
+
+                              Note: this is still not enough to get everything working.
+                              But the next step has to be done directly in the tests,
+                              see NewsSoapApiIT.
+                              -->
+                            <wsdlDirectory>${basedir}/target/generated-sources/wsdl</wsdlDirectory>
+                            <wsdlFiles>
+                                <wsdlFile>GameSoapImplService.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <packageName>me.contrapost.soap.client</packageName>
+                            <keep>true</keep>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+
+</project>

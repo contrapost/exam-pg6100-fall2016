@@ -14,6 +14,7 @@
         <module>quizAPI</module>
         <module>gameRest</module>
         <module>gameCommands</module>
+        <module>gameSoap</module>
     </modules>
 
     <properties>

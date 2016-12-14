@@ -40,18 +40,11 @@
             <artifactId>gameCommands</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--<dependency>
-            <groupId>me.contrapost</groupId>
-            <artifactId>quizApi</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-        </dependency>
         <dependency>
             <groupId>me.contrapost</groupId>
-            <artifactId>gameApi</artifactId>
+            <artifactId>gameSoap</artifactId>
             <version>${project.version}</version>
-            <type>jar</type>
-        </dependency>-->
+        </dependency>
     </dependencies>
 
     <build>
