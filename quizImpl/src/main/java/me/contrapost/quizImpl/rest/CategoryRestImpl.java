@@ -79,11 +79,9 @@ public class CategoryRestImpl implements CategoryRest {
     public void mergePatchCategory(@ApiParam("The unique id of the category") Long id,
                                    @ApiParam("The partial patch") String jsonPatch) {
 
-        CategoryDTO dto = CategoryConverter.transform(categoryEJB.getCategory(id));
+        requireCategoryExists(id);
 
-        if (dto == null) {
-            throw new WebApplicationException("Cannot find category with id " + id, 404);
-        }
+        CategoryDTO dto = CategoryConverter.transform(categoryEJB.getCategory(id));
 
         ObjectMapper jackson = new ObjectMapper();
 
@@ -96,7 +94,7 @@ public class CategoryRestImpl implements CategoryRest {
 
         if (jsonNode.has("id")) {
             throw new WebApplicationException(
-                    "Cannot modify the root category id from " + id + " to " + jsonNode.get("id"), 409);
+                    "Cannot modify the category id from " + id + " to " + jsonNode.get("id"), 409);
         }
 
         String newTitle = dto.title;

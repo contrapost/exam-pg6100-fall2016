@@ -15,9 +15,10 @@ import java.io.UnsupportedEncodingException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-@Ignore
+
 public class GameSoapApiIT {
 
     private static WireMockServer wireMockServer;
@@ -46,6 +47,7 @@ public class GameSoapApiIT {
         wireMockServer.stop();
     }
 
+    @Ignore
     @Test
     public void testGetRandom() throws UnsupportedEncodingException {
         String response =
@@ -60,7 +62,7 @@ public class GameSoapApiIT {
                         urlMatching(".*/quizzes/random*"))
                         .willReturn(WireMock.aResponse()
                                 .withHeader("Content-Type", "xml")
-//                                .withHeader("Content-Length", "" + response.getBytes("utf-8").length)
+                                .withHeader("Content-Length", "" + response.getBytes("utf-8").length)
                                 .withBody(response)));
 
 
@@ -70,6 +72,7 @@ public class GameSoapApiIT {
         assertEquals("question", gameDTO.getQuestion());
     }
 
+    @Ignore
     @Test
     public void testGetRandomFail() throws UnsupportedEncodingException {
 
@@ -92,5 +95,53 @@ public class GameSoapApiIT {
         );
 
         me.contrapost.soap.client.GameDTO gameDTO = ws.getRandomGame();
+    }
+
+    @Ignore
+    @Test
+    public void testPlayGameCorrect() throws UnsupportedEncodingException {
+
+        String response =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><gameDTO><quizId>1</quizId>" +
+                        "<question>Question</question><answerList><answer>Answer 1</answer>" +
+                        "<answer>Answer 2</answer><answer>Answer 3</answer><answer>Answer 4</answer></answerList>" +
+                        "<indexOfCorrectAnswer>0</indexOfCorrectAnswer></gameDTO>";
+
+        wireMockServer.stubFor(
+                WireMock.get(
+                        urlMatching(".*/quizzes/answer.*"))
+                        .withQueryParam("quizId", WireMock.matching("\\d+"))
+                        .willReturn(WireMock.aResponse()
+                                .withHeader("Content-Type", "application/xml; charset=utf-8")
+                                .withHeader("Content-Length", "" + response.getBytes("utf-8").length)
+                                .withBody(response)));
+
+        me.contrapost.soap.client.AnswerDTO answerDTO = ws.checkAnswer("1", "0");
+
+        assertTrue(answerDTO.isIsCorrect());
+    }
+
+    @Ignore
+    @Test
+    public void testPlayGameWrong() throws UnsupportedEncodingException {
+
+        String response =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><gameDTO><quizId>1</quizId>" +
+                        "<question>Question</question><answerList><answer>Answer 1</answer>" +
+                        "<answer>Answer 2</answer><answer>Answer 3</answer><answer>Answer 4</answer></answerList>" +
+                        "<indexOfCorrectAnswer>0</indexOfCorrectAnswer></gameDTO>";
+
+        wireMockServer.stubFor(
+                WireMock.get(
+                        urlMatching(".*/quizzes/answer.*"))
+                        .withQueryParam("quizId", WireMock.matching("\\d+"))
+                        .willReturn(WireMock.aResponse()
+                                .withHeader("Content-Type", "application/xml; charset=utf-8")
+                                .withHeader("Content-Length", "" + response.getBytes("utf-8").length)
+                                .withBody(response)));
+
+        me.contrapost.soap.client.AnswerDTO answerDTO = ws.checkAnswer("1", "2");
+
+        assertTrue(answerDTO.isIsCorrect());
     }
 }

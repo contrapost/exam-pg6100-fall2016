@@ -124,6 +124,21 @@ public class CategoryRestIT extends RestTestBase {
     }
 
     @Test
+    public void testCreateSubcategoryWithId() {
+        String categoryId = createCategory("Category");
+
+        String title = "Subcategory";
+
+        SubcategoryDTO dto = new SubcategoryDTO("1", title, categoryId);
+
+        given().contentType(ContentType.JSON)
+                .body(dto)
+                .post("/categories/" + categoryId + "/subcategories")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
     public void testExpand() {
         String categoryId = createCategory("Category");
 
@@ -191,6 +206,48 @@ public class CategoryRestIT extends RestTestBase {
 
         assertEquals(newTitle, readBack.title);
         assertEquals(categoryId, readBack.id); // should had stayed the same
+    }
+
+    @Test
+    public void testUpdateCategoryWithNewId() {
+
+        String categoryId = createCategory("Category");
+
+        String newId = "123";
+
+        given().contentType("application/merge-patch+json")
+                .body("{\"id\":\"" + newId + "\"}")
+                .patch("/categories/" + categoryId)
+                .then()
+                .statusCode(409);
+    }
+
+    @Test
+    public void testUpdateCategoryWithWrongId() {
+
+        String categoryId = createCategory("Category");
+
+        String newTitle = "RootCategory v.2";
+
+        given().contentType("application/merge-patch+json")
+                .body("{\"title\":\"" + newTitle + "\"}")
+                .patch("/categories/" + Integer.MAX_VALUE)
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void testUpdateCategoryWithWrongJson() {
+
+        String categoryId = createCategory("Category");
+
+        String newTitle = "RootCategory v.2";
+
+        given().contentType("application/merge-patch+json")
+                .body(newTitle)
+                .patch("/categories/" + categoryId)
+                .then()
+                .statusCode(400);
     }
 
     @Test
