@@ -44,6 +44,7 @@
             <groupId>me.contrapost</groupId>
             <artifactId>gameSoap</artifactId>
             <version>${project.version}</version>
+            <type>war</type>
         </dependency>
     </dependencies>
 
