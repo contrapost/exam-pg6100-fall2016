@@ -51,6 +51,20 @@ public class CategoryRestIT extends RestTestBase {
     }
 
     @Test
+    public void testCreateCategoryWithId() {
+
+        String title = "Title";
+
+        CategoryDTO dto = new CategoryDTO("1", title, null);
+
+        given().contentType(ContentType.JSON)
+                .body(dto)
+                .post("/categories")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
     public void testCreateCategoryRawHttp() throws Exception {
 
         String id = given().contentType(ContentType.JSON)
