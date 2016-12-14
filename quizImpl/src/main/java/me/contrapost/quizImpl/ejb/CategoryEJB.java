@@ -45,14 +45,6 @@ public class CategoryEJB {
         return subCategory.getId();
     }
 
-    public boolean deleteSubcategory(@NotNull long id){
-        Subcategory subCategory = em.find(Subcategory.class, id);
-        if (subCategory == null) return false; // Or cast exception
-        Category rootCategory = em.find(Category.class, subCategory.getParentCategory().getId());
-        rootCategory.getSubcategories().remove(id);
-        return true;
-    }
-
     public boolean updateCategoryTitle(@NotNull long categoryId, @NotNull String newTitle) {
         Category category = em.find(Category.class, categoryId);
         if (category == null) return false;

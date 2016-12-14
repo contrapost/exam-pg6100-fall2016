@@ -3,10 +3,7 @@ package me.contrapost.gameCommands.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 
 @XmlRootElement
@@ -22,7 +19,8 @@ public class GameDTO {
     @ApiModelProperty("The question")
     public String question;
 
-    @XmlElement
+    @XmlElementWrapper(name = "answerList")
+    @XmlElement(name = "answer")
     @ApiModelProperty("The set of answers marked with false and true")
     public List<String> answerList;
 

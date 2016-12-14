@@ -7,11 +7,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 @Stateless
 public class QuizEJB {
 
@@ -48,22 +47,6 @@ public class QuizEJB {
         return true;
     }
 
-    public boolean updateQuizQuestion(@NotNull long quizId, @NotNull String newQuestionText) {
-        Quiz quiz = em.find(Quiz.class, quizId);
-        if (quiz == null) return false;
-        quiz.setQuestion(newQuestionText);
-        return true;
-    }
-
-    public boolean updateAnswersList(@NotNull long quizId, @NotNull String previousAnswer, @NotNull String newAnswer) {
-        Quiz quiz = em.find(Quiz.class, quizId);
-        if (quiz == null || !quiz.getAnswers().contains(previousAnswer))
-            throw new IllegalArgumentException("Quiz doesn't exist or the previous answer doesn't match one in the map");
-        int index = quiz.getAnswers().indexOf(previousAnswer);
-        quiz.getAnswers().set(index, newAnswer);
-        return true;
-    }
-
     public boolean updateQuiz(@NotNull Long id,
                               @NotNull String newQuestion,
                               @NotNull List<String> newAnswerList,
@@ -84,15 +67,6 @@ public class QuizEJB {
     public List<Quiz> getAllQuizzes(int max) {
         //noinspection unchecked
         return em.createNamedQuery(Quiz.GET_ALL_QUIZZES).setMaxResults(max).getResultList();
-    }
-
-    public List<Long> getRandomQuizzes(int numberOfQuizzes) {
-        List<Quiz> quizzes = getAllQuizzes();
-        List<Long> ids = new ArrayList<>();
-        while(ids.size() != numberOfQuizzes && quizzes.size() != 0) {
-            ids.add(quizzes.remove(new Random().nextInt(quizzes.size())).getId());
-        }
-        return ids;
     }
 
     public Long getRandomQuiz() {

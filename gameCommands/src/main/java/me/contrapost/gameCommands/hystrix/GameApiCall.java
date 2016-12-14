@@ -30,7 +30,7 @@ public class GameApiCall extends HystrixCommand<Response> {
 
         Response response = client.target(uri)
                 .request("application/json")
-                .get();;
+                .get();
 
         return response;
     }
