@@ -36,6 +36,10 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-standalone</artifactId>
+        </dependency>
     </dependencies>
 
 

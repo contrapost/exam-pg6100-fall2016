@@ -22,11 +22,4 @@ public class QuizDTO {
 
     public QuizDTO() {
     }
-
-    public QuizDTO(String id, String question, String categoryId, List<String> answers) {
-        this.id = id;
-        this.question = question;
-        subcategoryId = categoryId;
-        answerList = answers;
-    }
 }
